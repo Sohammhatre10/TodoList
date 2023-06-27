@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Todo List</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #4b4d4f;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .todo-list {
+      list-style-type: none;
+      padding: 0px;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      opacity: 0;
+      transform: translateX(-20px);
+      animation: slideIn 1s ease forwards;
+    }
+
+    .todo-item:last-child {
+      border-bottom: none;
+    }
+
+    .todo-item:hover {
+      background-color: #f9f9f9;
+    }
+
+    .todo-item input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    .todo-item span {
+      flex-grow: 1;
+    }
+
+    .delete-btn {
+      border: none;
+      background: none;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .todo-item:hover .delete-btn {
+      opacity: 1;
+    }
+
+    .input {
+ border: none;
+ padding: 1rem;
+ border-radius: 1rem;
+ background: #e8e8e8;
+ transition: 0.3s;
+}
+
+.input:focus {
+ outline-color: #e8e8e8;
+ background: #e8e8e8;
+ transition: 0.3s;
+}
+
+.btn {
+ position: relative;
+ font-size: 13px;
+ text-decoration: none;
+ padding: 1em 2.5em;
+ display: inline-block;
+ border-radius: 3em;
+ transition: all .2s;
+ border: none;
+ font-family: inherit;
+ font-weight: 500;
+ color: white;
+ background-color: #4b4d4f;
+}
+
+.btn:hover {
+ transform: translateY(-3px);
+ box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+ background-color: black;
+}
+
+.btn:active {
+ transform: translateY(-1px);
+ box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn::after {
+ content: "";
+ display: inline-block;
+ height: 100%;
+ width: 100%;
+ border-radius: 100px;
+ position: absolute;
+ top: 0;
+ left: 0;
+ z-index: -1;
+ transition: all .4s;
+}
+
+.btn::after {
+ background-color: #fff;
+}
+
+.btn:hover::after {
+ transform: scaleX(1.4) scaleY(1.6);
+ opacity: 0;
+}
+
+    /* Animation classes */
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Todo List</h1>
+    <ul class="todo-list" id="todo-list"></ul>
+    <form id="todo-form">
+      <div>
+      <center>
+        
+<input type="text" name="text" class="input" id="todo-input" placeholder="Type here...">
+      </center>
+      </div>
+      <br>
+      <center>
+        <button class="btn" type="submit"> Add </button>
+      </center>
+    </form>
+  </div>
+
+  <script>
+    const todoForm = document.getElementById('todo-form');
+    const todoInput = document.getElementById('todo-input');
+    const todoList = document.getElementById('todo-list');
+
+    // Function to create a new todo item
+    function createTodoItem(text) {
+      const todoItem = document.createElement('li');
+      todoItem.className = 'todo-item'; // Apply slide-in animation via CSS
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+
+      const span = document.createElement('span');
+      span.textContent = text;
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.textContent = 'Delete';
+
+      todoItem.appendChild(checkbox);
+      todoItem.appendChild(span);
+      todoItem.appendChild(deleteBtn);
+
+      // Add event listener to the delete button
+      deleteBtn.addEventListener('click', () => {
+        todoItem.classList.add('fade-out'); // Apply fade-out animation class
+
+        // Remove the todo item from the list after the animation ends
+        setTimeout(() => {
+          todoItem.remove();
+        }, 300); // Wait for 300ms (same as the fade-out animation duration)
+      });
+
+      return todoItem;
+    }
+
+    // Function to handle form submission
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      const todoText = todoInput.value.trim();
+      if (todoText !== '') {
+        const todoItem = createTodoItem(todoText);
+        todoList.appendChild(todoItem);
+        todoInput.value = '';
+      }
+    }
+
+    todoForm.addEventListener('submit', handleFormSubmit);
+  </script>
+</body>
+</html>
